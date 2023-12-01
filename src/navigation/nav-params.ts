@@ -1,9 +1,5 @@
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-
-import type {
-  NavigatorScreenParams,
-  CompositeScreenProps,
-} from "@react-navigation/native";
+import type { NavigatorScreenParams, CompositeScreenProps } from '@react-navigation/native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootTabParamsList = {
   Favorites: undefined;
@@ -16,10 +12,12 @@ export type PokedexStackParamsList = {
   Pokemon: { id: string };
 };
 
-export type NativeTabScreenProps<U extends keyof RootTabParamsList> =
-  NativeStackScreenProps<RootTabParamsList, U>;
+export type NativeTabScreenProps<U extends keyof RootTabParamsList> = NativeStackScreenProps<
+  RootTabParamsList,
+  U
+>;
 
 export type PokedexScreenNavigationProps = CompositeScreenProps<
-  NativeTabScreenProps<"Home">,
+  NativeTabScreenProps<'Home'>,
   NativeStackScreenProps<PokedexStackParamsList>
 >;

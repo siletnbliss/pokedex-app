@@ -1,7 +1,8 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Pokedex from "../screens/Pokedex";
-import { PokedexStackParamsList } from "./nav-params";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+
+import { PokedexStackParamsList } from './nav-params';
+import Pokedex from '../screens/Pokedex';
 
 const Stack = createNativeStackNavigator<PokedexStackParamsList>();
 
