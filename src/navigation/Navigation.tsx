@@ -5,8 +5,10 @@ import { View, StyleSheet } from 'react-native';
 
 import { RootTabParamsList } from './nav-params';
 import Pokeball from '../components/Pokeball';
+import Account from '../screens/Account';
 import Favorites from '../screens/Favorites';
 import Pokedex from '../screens/Pokedex';
+import { COLORS } from '../utils/constants';
 
 const Tab = createBottomTabNavigator<RootTabParamsList>();
 
@@ -15,7 +17,7 @@ const Navigation = () => {
     <Tab.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
-        tabBarActiveTintColor: '#ee1515',
+        tabBarActiveTintColor: COLORS.primary,
       }}
       initialRouteName="Home">
       <Tab.Screen
@@ -49,7 +51,7 @@ const Navigation = () => {
           headerTitle: 'My account',
         }}
         name="Account"
-        component={Pokedex}
+        component={Account}
       />
     </Tab.Navigator>
   );

@@ -7,10 +7,10 @@ interface Props extends SvgProps {
   color?: ColorValue;
 }
 
-export default function Pokeball({ size, color, ...rest }: Props) {
+const Pokeball = React.forwardRef<Svg, Props>(function Pokeball({ size, color, ...rest }, ref) {
   return (
     <View>
-      <Svg width={size} height={size} viewBox="0 0 1024 1024" {...rest}>
+      <Svg width={size} height={size} viewBox="0 0 1024 1024" ref={ref} {...rest}>
         <Path
           id="pkmn-go-menu"
           fill={color}
@@ -56,4 +56,6 @@ export default function Pokeball({ size, color, ...rest }: Props) {
       </Svg>
     </View>
   );
-}
+});
+
+export default Pokeball;
