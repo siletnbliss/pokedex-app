@@ -1,16 +1,16 @@
 import React from 'react';
 import { ColorValue, View } from 'react-native';
-import { Path, Svg } from 'react-native-svg';
+import { Path, Svg, SvgProps } from 'react-native-svg';
 
-interface Props {
+interface Props extends SvgProps {
   size?: number;
   color?: ColorValue;
 }
 
-export default function Pokeball({ size, color }: Props) {
+export default function Pokeball({ size, color, ...rest }: Props) {
   return (
     <View>
-      <Svg width={size} height={size} viewBox="0 0 1024 1024">
+      <Svg width={size} height={size} viewBox="0 0 1024 1024" {...rest}>
         <Path
           id="pkmn-go-menu"
           fill={color}
