@@ -16,8 +16,8 @@ export const useFetchPokemon = (
   }
 ) => {
   const data = useFetcher<PokemonListResponse, PokemonListRawReponse>(
-    `/pokemon?limit=${size}&offset=${page}`,
-    {},
+    [`pokemon`, { limit: size, offset: page }],
+    { api: 'pokemon' },
     mapper
   );
   return { ...data };

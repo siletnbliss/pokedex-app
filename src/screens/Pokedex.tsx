@@ -1,17 +1,46 @@
 import React from 'react';
-import { Text, SafeAreaView } from 'react-native';
+import { Text, SafeAreaView, View } from 'react-native';
 
+import Container from '../components/Container';
 import UiFeedback from '../components/UiFeedback';
-import { useFetchPokemon } from '../hooks/useFetchPokemon';
+import { useFetchPokemonDetailList } from '../hooks/useFetchPokemonDetail';
 
 export default function Pokedex() {
-  const { data: pokedex, isLoading, isError, isSuccess } = useFetchPokemon();
+  const {
+    results: pokedex,
+    isError,
+    isLoading,
+    isLoadingInitial,
+    isErrorInitial,
+    isSuccessInitial,
+  } = useFetchPokemonDetailList();
 
   return (
-    <UiFeedback isLoading={isLoading} isError={isError} isEmpty={isSuccess && !pokedex.length}>
+    <UiFeedback
+      isLoading={isLoadingInitial || isLoading}
+      isError={isErrorInitial || isError}
+      isEmpty={isSuccessInitial && !pokedex.length}>
       <SafeAreaView>
         <Text>Pokedex</Text>
-        {pokedex?.map((p) => <Text key={p.name}>{p.name}</Text>)}
+        <View
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            width: '100%',
+            height: '100%',
+          }}>
+          {pokedex?.map((p, i) => (
+            <Container
+              key={i}
+              style={{
+                width: '45%',
+                height: 'auto',
+              }}>
+              <Text>{p.data?.name}</Text>
+            </Container>
+          ))}
+        </View>
       </SafeAreaView>
     </UiFeedback>
   );
