@@ -30,7 +30,8 @@ const Navigation = () => {
       <Tab.Screen
         options={{
           tabBarLabel: '',
-          headerTitle: 'Pokédex',
+          headerTransparent: true,
+          headerTitle: '',
           tabBarIcon: ({ color }) => (
             <View style={[styles.ballContainer, styles.shadowProp]}>
               <Pokeball

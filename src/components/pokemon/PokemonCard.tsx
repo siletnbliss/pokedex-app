@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { Text, StyleSheet, Image, Pressable } from 'react-native';
 
 import { PokemonDetailSimple } from '../../types/pokemon';
-import { COLORS } from '../../utils/constants';
+import { getColorFromType } from '../../utils/getColorFromType';
+import DiagonalGradient from '../DiagonalGradient';
+import FadeInView from '../FadeInView';
 
 interface Props {
   pokemon: PokemonDetailSimple;
@@ -12,15 +14,17 @@ export default function PokemonCard({ pokemon }: Props) {
   const onPress = () => {
     console.log('pressed');
   };
+
+  const colors = pokemon.type.map((t) => getColorFromType(t));
   return (
     <Pressable style={styles.card} onPress={onPress}>
-      <View style={styles.spacing}>
-        <View style={styles.background}>
+      <FadeInView duration={500} style={styles.spacing}>
+        <DiagonalGradient colors={colors} locations={[0.6, 0.4]} style={styles.background}>
           <Text style={styles.number}>#{`${pokemon.order}`.padStart(3, '0')}</Text>
           <Text style={styles.name}>{pokemon.name}</Text>
           <Image source={{ uri: pokemon.img }} style={styles.image} />
-        </View>
-      </View>
+        </DiagonalGradient>
+      </FadeInView>
     </Pressable>
   );
 }
@@ -35,7 +39,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   background: {
-    backgroundColor: COLORS.lightgray,
+    flex: 1,
+    borderRadius: 15,
+    padding: 10,
   },
   image: {
     position: 'absolute',
@@ -49,6 +55,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     paddingTop: 10,
+    textTransform: 'capitalize',
   },
   number: {
     position: 'absolute',
