@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, SafeAreaView, View } from 'react-native';
+import { Text, SafeAreaView } from 'react-native';
 
-import Container from '../components/Container';
 import UiFeedback from '../components/UiFeedback';
+import PokemonList from '../components/pokemon/PokemonList';
 import { useFetchPokemonDetailList } from '../hooks/useFetchPokemonDetail';
+import { PokemonDetailSimple } from '../types/pokemon';
 
 export default function Pokedex() {
   const {
@@ -16,32 +17,16 @@ export default function Pokedex() {
   } = useFetchPokemonDetailList();
 
   return (
-    <UiFeedback
-      isLoading={isLoadingInitial || isLoading}
-      isError={isErrorInitial || isError}
-      isEmpty={isSuccessInitial && !pokedex.length}>
-      <SafeAreaView>
+    <SafeAreaView>
+      <UiFeedback
+        isLoading={isLoadingInitial || isLoading}
+        isError={isErrorInitial || isError}
+        isEmpty={isSuccessInitial && !pokedex.length}>
         <Text>Pokedex</Text>
-        <View
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            width: '100%',
-            height: '100%',
-          }}>
-          {pokedex?.map((p, i) => (
-            <Container
-              key={i}
-              style={{
-                width: '45%',
-                height: 'auto',
-              }}>
-              <Text>{p.data?.name}</Text>
-            </Container>
-          ))}
-        </View>
-      </SafeAreaView>
-    </UiFeedback>
+        <PokemonList
+          pokemon={pokedex.filter((p) => !!p.data).map((p) => p.data as PokemonDetailSimple)}
+        />
+      </UiFeedback>
+    </SafeAreaView>
   );
 }
