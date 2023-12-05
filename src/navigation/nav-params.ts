@@ -9,7 +9,7 @@ export type RootTabParamsList = {
 
 export type PokedexStackParamsList = {
   Pokedex: undefined;
-  Pokemon: { id: string };
+  Pokemon: { id: string; name: string };
 };
 
 export type NativeTabScreenProps<U extends keyof RootTabParamsList> = NativeStackScreenProps<
@@ -21,3 +21,7 @@ export type PokedexScreenNavigationProps = CompositeScreenProps<
   NativeTabScreenProps<'Home'>,
   NativeStackScreenProps<PokedexStackParamsList>
 >;
+
+export type PokemonScreenProps = NativeStackScreenProps<PokedexStackParamsList, 'Pokemon'>;
+
+export type PokedexScreenProps = NativeStackScreenProps<PokedexStackParamsList, 'Pokedex'>;

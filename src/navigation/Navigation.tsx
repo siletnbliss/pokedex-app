@@ -3,11 +3,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
+import PokedexNavigation from './Pokedex';
 import { RootTabParamsList } from './nav-params';
 import Pokeball from '../components/Pokeball';
 import Account from '../screens/Account';
 import Favorites from '../screens/Favorites';
-import Pokedex from '../screens/Pokedex';
 import { COLORS } from '../utils/constants';
 
 const Tab = createBottomTabNavigator<RootTabParamsList>();
@@ -30,7 +30,7 @@ const Navigation = () => {
       <Tab.Screen
         options={{
           tabBarLabel: '',
-          headerTransparent: true,
+          headerShown: false,
           headerTitle: '',
           tabBarIcon: ({ color }) => (
             <View style={[styles.ballContainer, styles.shadowProp]}>
@@ -43,7 +43,7 @@ const Navigation = () => {
           ),
         }}
         name="Home"
-        component={Pokedex}
+        component={PokedexNavigation}
       />
       <Tab.Screen
         options={{

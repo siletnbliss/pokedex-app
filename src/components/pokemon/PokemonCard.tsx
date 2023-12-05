@@ -7,21 +7,18 @@ import FadeInView from '../FadeInView';
 
 interface Props {
   pokemon: PokemonDetailSimple;
+  onPress: (pokemon: PokemonDetailSimple) => void;
 }
 
-function PokemonCard({ pokemon }: Props) {
-  const onPress = () => {
-    console.log('pressed');
-  };
-
+function PokemonCard({ pokemon, onPress }: Props) {
   return (
-    <Pressable style={styles.card} onPress={onPress}>
+    <Pressable style={styles.card} onPress={() => onPress(pokemon)}>
       <FadeInView duration={500} style={styles.spacing}>
         <DiagonalGradient
           colors={pokemon.typeColors}
           locations={[0.6, 0.4]}
           style={styles.background}>
-          <Text style={styles.number}>#{`${pokemon.order}`.padStart(3, '0')}</Text>
+          <Text style={styles.number}>#{`${pokemon.id}`.padStart(3, '0')}</Text>
           <Text style={styles.name}>{pokemon.name}</Text>
           <Image source={{ uri: pokemon.img }} style={styles.image} />
         </DiagonalGradient>

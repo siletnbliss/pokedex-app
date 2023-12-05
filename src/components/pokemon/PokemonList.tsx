@@ -1,7 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, StyleSheet, Platform } from 'react-native';
 
 import PokemonCard from './PokemonCard';
+import { PokedexScreenNavigationProps } from '../../navigation/nav-params';
 import { PokemonDetailSimple } from '../../types/pokemon';
 import Container from '../Container';
 import Spinner from '../Spinner';
@@ -29,13 +31,19 @@ export default function PokemonList({
   isLoadingPrevious,
   hasNext,
 }: Props) {
+  const navigation = useNavigation<PokedexScreenNavigationProps['navigation']>();
+
+  const onPokemonPress = (pokemon: PokemonDetailSimple) => {
+    navigation.navigate('Pokemon', { id: String(pokemon.id), name: pokemon.name });
+  };
+
   return (
     <FlatList
       data={pokemon}
       numColumns={2}
       showsVerticalScrollIndicator={false}
       keyExtractor={(p) => String(p.id)}
-      renderItem={({ item }) => <PokemonCard pokemon={item} />}
+      renderItem={({ item }) => <PokemonCard pokemon={item} onPress={onPokemonPress} />}
       contentContainerStyle={styles.flatListContainer}
       onEndReached={loadMore}
       onEndReachedThreshold={0.1}
@@ -50,7 +58,7 @@ export default function PokemonList({
 const styles = StyleSheet.create({
   flatListContainer: {
     padding: 5,
-    marginTop: Platform.OS === 'android' ? 10 : 0,
+    marginTop: Platform.OS === 'android' ? 20 : 0,
   },
   loader: {
     marginTop: 20,
