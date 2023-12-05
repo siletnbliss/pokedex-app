@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native';
 
 import UiFeedback from '../components/UiFeedback';
 import PokemonList from '../components/pokemon/PokemonList';
-import { useFetchPokemonDetailList } from '../hooks/useFetchPokemonDetail';
+import { useFetchPokemonDetailList } from '../hooks/useFetchPokemonDetailList';
 import { PokemonDetailSimple } from '../types/pokemon';
 
 export default function Pokedex() {
