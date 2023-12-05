@@ -1,17 +1,19 @@
-import { QueryKey, useQueries, useQuery, UseQueryOptions } from 'react-query';
+import { useInfiniteQuery, useQueries, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { API_HOST } from '../utils/constants';
 
 type APIs = 'pokemon' | 'blank';
-interface Config {
+interface Config<Result, Raw = Result> {
   api?: APIs;
+  map?: Map<Raw, Result>;
 }
 
 export type Map<From, To> = (r: From) => To;
-type ExtendedQueryKey = QueryKey | Record<string, any>;
+type ExtendedQueryKey = string | number | Record<string, any>;
 
 export const fetcher = async <R, M>(url: string, map?: Map<M, R>): Promise<R> => {
   try {
+    console.log({ FETCHER_URL: url });
     const res = await fetch(url);
 
     if (!res.ok) {
@@ -42,9 +44,9 @@ const reduceKey = (k: ExtendedQueryKey[]): string => {
       return prev;
     }
   }, '');
-  if (k.length === 1) {
-    reduced = reduced.slice(1);
-  }
+
+  reduced = reduced.slice(1);
+
   return params.length > 1 ? reduced + params.slice(0, -1) : reduced;
 };
 
@@ -52,7 +54,6 @@ const parseKey = (k: ExtendedQueryKey[], api?: APIs) => {
   let baseUrl: string;
   let reduced = reduceKey(k);
   if (!reduced.startsWith('/') && api !== 'blank') reduced = '/' + reduced;
-
   switch (api) {
     case 'pokemon':
       baseUrl = API_HOST;
@@ -66,30 +67,68 @@ const parseKey = (k: ExtendedQueryKey[], api?: APIs) => {
   return baseUrl + reduced;
 };
 
+const DEFAULT_OPTIONS = {
+  refetchOnMount: false,
+  refetchOnReconnect: false,
+  staleTime: Infinity,
+};
+
 export function useFetcherList<R, M = R, E = Error>(
   key: ExtendedQueryKey[][],
-  config: Config = { api: 'pokemon' },
-  map?: Map<M, R>
+  { api, map }: Config<R, M>
 ) {
   const queries = key.map<UseQueryOptions<R, E, R, ExtendedQueryKey[]>>((k) => {
-    return { queryKey: k, queryFn: () => fetcher(parseKey(k, config.api), map) };
+    return { queryKey: k, queryFn: () => fetcher(parseKey(k, api), map), ...DEFAULT_OPTIONS };
   });
-  const results = useQueries(queries.length ? queries : []);
+  const results = useQueries({ queries: queries.length ? queries : [] });
   const isLoading = results.some((q) => q.isLoading);
   const isError = results.some((q) => q.isError);
+
   return { results, isLoading, isError };
 }
 
 export function useFetcher<Result, Mapped = Result, Err = Error>(
   key: ExtendedQueryKey[],
-  config: Config = { api: 'pokemon' },
-  map?: Map<Mapped, Result>
+  { api, map }: Config<Result, Mapped>
 ) {
-  const url = parseKey(key, config.api);
-  const info = useQuery<Result, Err, Result, ExtendedQueryKey[]>(key, async () =>
-    fetcher<Result, Mapped>(url, map)
-  );
+  const url = parseKey(key, api);
+  const info = useQuery<Result, Err, Result, ExtendedQueryKey[]>({
+    queryKey: key,
+    queryFn: async () => fetcher<Result, Mapped>(url, map),
+    ...DEFAULT_OPTIONS,
+  });
   return {
     ...info,
   };
+}
+
+type KeyExtractor<R> = (k: R) => ExtendedQueryKey | undefined;
+
+interface InfiniteConfig<R, M> extends Config<R, M> {
+  keyExtractors: { next: KeyExtractor<R>; previous?: KeyExtractor<R> };
+  maxPages?: number;
+}
+
+export function useInfiniteFetcher<Result, Mapped = Result>(
+  key: ExtendedQueryKey[],
+  { api, map, keyExtractors, maxPages }: InfiniteConfig<Result, Mapped>
+) {
+  const result = useInfiniteQuery({
+    queryKey: key,
+    initialPageParam: {},
+    ...DEFAULT_OPTIONS,
+    queryFn: ({ pageParam }) => {
+      return fetcher<Result, Mapped>(parseKey([...key, pageParam], api), map);
+    },
+    getNextPageParam: (lastPage, pages) => {
+      return keyExtractors.next(lastPage);
+    },
+    getPreviousPageParam: (page, pages) => {
+      if (!keyExtractors.previous) return;
+      return keyExtractors.previous(page);
+    },
+    maxPages,
+  });
+
+  return { ...result };
 }

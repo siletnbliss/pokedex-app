@@ -1,6 +1,7 @@
 import { useFetchPokemon } from './useFetchPokemon';
 import { Map, useFetcher, useFetcherList } from './useFetcher';
 import { PokemonDetailRaw, PokemonDetailSimple } from '../types/pokemon';
+import { getColorFromType } from '../utils/getColorFromType';
 
 export const useFetchPokemonSingleDetail = (url: string) => {
   const data = useFetcher<PokemonDetailRaw>([url], { api: 'blank' });
@@ -13,6 +14,7 @@ const mapper: Map<PokemonDetailRaw, PokemonDetailSimple> = (poke) => ({
   type: poke.types.map((t) => t.type.name),
   order: poke.order,
   img: poke.sprites.other['official-artwork'].front_default,
+  typeColors: poke.types.map((t) => getColorFromType(t.type.name)),
 });
 
 export const useFetchPokemonDetailList = (urls?: string[]) => {
@@ -21,17 +23,29 @@ export const useFetchPokemonDetailList = (urls?: string[]) => {
     isError: isBaseListError,
     isLoading: isBaseListLoading,
     isSuccess: isBaseListSuccess,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    hasPreviousPage,
+    fetchPreviousPage,
+    isFetchingPreviousPage,
   } = useFetchPokemon();
 
   const results = useFetcherList<PokemonDetailSimple, PokemonDetailRaw>(
-    baseList ? baseList.map((item) => [item.url]) : [],
-    { api: 'blank' },
-    mapper
+    baseList ? baseList.pages.flatMap((p) => p.results).map((item) => [item.url]) : [],
+    { api: 'blank', map: mapper }
   );
+
   return {
     ...results,
     isLoadingInitial: isBaseListLoading,
     isErrorInitial: isBaseListError,
     isSuccessInitial: isBaseListSuccess,
+    isLoadingNextPage: isFetchingNextPage,
+    hasNextPage,
+    loadNextPage: fetchNextPage,
+    isLoadingPreviousPage: isFetchingPreviousPage,
+    hasPreviousPage,
+    loadPreviousPage: fetchPreviousPage,
   };
 };

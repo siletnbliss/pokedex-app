@@ -6,11 +6,12 @@ export interface PokemonListItem extends NameUrl {}
 
 export interface PokemonListRawReponse {
   count: number;
-  next: string;
+  next?: string;
+  previous?: string;
   results: [PokemonListItem][];
 }
 
-export type PokemonListResponse = PokemonListItem[];
+export type PokemonListResponse = { results: PokemonListItem[]; next?: string; previous?: string };
 
 export interface PokemonDetailRaw {
   abilities: {
@@ -26,6 +27,9 @@ export interface PokemonDetailRaw {
   }[];
   name: string;
   order: number;
+  game_indices: {
+    game_index: number;
+  }[];
   sprites: {
     back_default: string;
     front_default: string;
@@ -55,6 +59,7 @@ export interface PokemonDetailSimple {
   id: number;
   name: string;
   type: string[];
+  typeColors: string[];
   order: number;
   img: string;
 }

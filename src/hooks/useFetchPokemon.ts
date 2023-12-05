@@ -1,13 +1,16 @@
-import { Map, useFetcher } from './useFetcher';
+import { Map, useInfiniteFetcher } from './useFetcher';
 import { PokemonListRawReponse, PokemonListResponse } from '../types/pokemon';
+import { API_HOST } from '../utils/constants';
 
 interface Params {
   page: number;
   size: number;
 }
 
-const mapper: Map<PokemonListRawReponse, PokemonListResponse> = (res) =>
-  res.results?.flatMap((v) => v) || [];
+const mapper: Map<PokemonListRawReponse, PokemonListResponse> = (res) => ({
+  results: res.results?.flatMap((v) => v) || [],
+  next: res.next,
+});
 
 export const useFetchPokemon = (
   { page, size }: Params = {
@@ -15,10 +18,18 @@ export const useFetchPokemon = (
     size: 20,
   }
 ) => {
-  const data = useFetcher<PokemonListResponse, PokemonListRawReponse>(
-    [`pokemon`, { limit: size, offset: page }],
-    { api: 'pokemon' },
-    mapper
+  const data = useInfiniteFetcher<PokemonListResponse, PokemonListRawReponse>(
+    [API_HOST, 'pokemon', { limit: size, offset: page }],
+    {
+      api: 'blank',
+      map: mapper,
+      keyExtractors: {
+        next: (k) => (k.next ? '?' + k.next.split('?').pop() : undefined),
+        previous: (k) => (k.previous ? '?' + k.previous.split('?').pop() : undefined),
+      },
+      maxPages: 5,
+    }
   );
+
   return { ...data };
 };

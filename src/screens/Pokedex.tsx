@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 import UiFeedback from '../components/UiFeedback';
 import PokemonList from '../components/pokemon/PokemonList';
@@ -14,17 +14,35 @@ export default function Pokedex() {
     isLoadingInitial,
     isErrorInitial,
     isSuccessInitial,
+    isLoadingNextPage,
+    loadNextPage,
+    hasNextPage,
+    isLoadingPreviousPage,
+    hasPreviousPage,
+    loadPreviousPage,
   } = useFetchPokemonDetailList();
+
+  const shouldLoadNextPage = () => {
+    if (!hasNextPage || isLoadingNextPage || isLoading) return;
+    loadNextPage();
+  };
+  const shouldLoadPreviousPage = () => {
+    if (!hasPreviousPage || isLoadingPreviousPage || isLoading) return;
+    loadPreviousPage();
+  };
 
   return (
     <SafeAreaView>
       <UiFeedback
-        isLoading={isLoadingInitial || isLoading}
+        isLoading={isLoadingInitial}
         isError={isErrorInitial || isError}
         isEmpty={isSuccessInitial && !pokedex.length}>
-        <Text>Pokedex</Text>
         <PokemonList
           pokemon={pokedex.filter((p) => !!p.data).map((p) => p.data as PokemonDetailSimple)}
+          loadMore={shouldLoadNextPage}
+          loadPrevious={shouldLoadPreviousPage}
+          isLoading={isLoadingNextPage || isLoading}
+          isLoadingPrevious={isLoadingPreviousPage || isLoading}
         />
       </UiFeedback>
     </SafeAreaView>
