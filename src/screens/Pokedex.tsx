@@ -42,7 +42,8 @@ export default function Pokedex() {
           loadMore={shouldLoadNextPage}
           loadPrevious={shouldLoadPreviousPage}
           isLoading={isLoadingNextPage || isLoading}
-          isLoadingPrevious={isLoadingPreviousPage || isLoading}
+          isLoadingPrevious={hasPreviousPage}
+          hasNext={hasNextPage}
         />
       </UiFeedback>
     </SafeAreaView>

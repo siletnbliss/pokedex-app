@@ -10,6 +10,7 @@ interface Params {
 const mapper: Map<PokemonListRawReponse, PokemonListResponse> = (res) => ({
   results: res.results?.flatMap((v) => v) || [],
   next: res.next,
+  previous: res.previous,
 });
 
 export const useFetchPokemon = (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, Platform } from 'react-native';
 
 import PokemonCard from './PokemonCard';
 import { PokemonDetailSimple } from '../../types/pokemon';
@@ -12,10 +12,11 @@ interface Props {
   loadPrevious: () => any;
   isLoading: boolean;
   isLoadingPrevious: boolean;
+  hasNext: boolean;
 }
 
-const CustomLoader = () => (
-  <Container style={styles.loader}>
+const CustomLoader = ({ isTop = false }: { isTop?: boolean }) => (
+  <Container style={[styles.loader, { marginBottom: isTop ? 30 : 40 }]}>
     <Spinner size={60} />
   </Container>
 );
@@ -26,6 +27,7 @@ export default function PokemonList({
   loadPrevious,
   isLoading,
   isLoadingPrevious,
+  hasNext,
 }: Props) {
   return (
     <FlatList
@@ -36,10 +38,10 @@ export default function PokemonList({
       renderItem={({ item }) => <PokemonCard pokemon={item} />}
       contentContainerStyle={styles.flatListContainer}
       onEndReached={loadMore}
-      onEndReachedThreshold={0.3}
+      onEndReachedThreshold={0.1}
       onScrollToTop={loadPrevious}
-      ListHeaderComponent={isLoadingPrevious ? <CustomLoader /> : null}
-      ListFooterComponent={isLoading ? <CustomLoader /> : null}
+      ListHeaderComponent={isLoadingPrevious ? <CustomLoader isTop /> : null}
+      ListFooterComponent={hasNext ? <CustomLoader /> : null}
       maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
     />
   );
@@ -48,10 +50,11 @@ export default function PokemonList({
 const styles = StyleSheet.create({
   flatListContainer: {
     padding: 5,
+    marginTop: Platform.OS === 'android' ? 10 : 0,
   },
   loader: {
     marginTop: 20,
-    marginBottom: 60,
+    marginBottom: 40,
     height: 60,
   },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Text, StyleSheet, Image, Pressable } from 'react-native';
 
 import { PokemonDetailSimple } from '../../types/pokemon';
@@ -9,7 +9,7 @@ interface Props {
   pokemon: PokemonDetailSimple;
 }
 
-export default function PokemonCard({ pokemon }: Props) {
+function PokemonCard({ pokemon }: Props) {
   const onPress = () => {
     console.log('pressed');
   };
@@ -29,6 +29,8 @@ export default function PokemonCard({ pokemon }: Props) {
     </Pressable>
   );
 }
+
+export default memo(PokemonCard);
 
 const styles = StyleSheet.create({
   card: {

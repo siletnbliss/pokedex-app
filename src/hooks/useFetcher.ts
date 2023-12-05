@@ -13,7 +13,6 @@ type ExtendedQueryKey = string | number | Record<string, any>;
 
 export const fetcher = async <R, M>(url: string, map?: Map<M, R>): Promise<R> => {
   try {
-    console.log({ FETCHER_URL: url });
     const res = await fetch(url);
 
     if (!res.ok) {
