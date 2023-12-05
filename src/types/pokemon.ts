@@ -60,6 +60,8 @@ export interface PokemonDetailSimple {
   name: string;
   type: string[];
   typeColors: string[];
-  order: number;
+  order: string;
   img: string;
 }
+
+export type PokemonDetailFull = PokemonDetailSimple & Pick<PokemonDetailRaw, 'stats'> & object;

@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { Text, StyleSheet, Image, Pressable } from 'react-native';
 
+import PokemonTypeGradient from './PokemonTypeGradient';
 import { PokemonDetailSimple } from '../../types/pokemon';
-import DiagonalGradient from '../DiagonalGradient';
 import FadeInView from '../FadeInView';
 
 interface Props {
@@ -14,14 +14,11 @@ function PokemonCard({ pokemon, onPress }: Props) {
   return (
     <Pressable style={styles.card} onPress={() => onPress(pokemon)}>
       <FadeInView duration={500} style={styles.spacing}>
-        <DiagonalGradient
-          colors={pokemon.typeColors}
-          locations={[0.6, 0.4]}
-          style={styles.background}>
-          <Text style={styles.number}>#{`${pokemon.id}`.padStart(3, '0')}</Text>
+        <PokemonTypeGradient colors={pokemon.typeColors} style={styles.background}>
+          <Text style={styles.number}>#{pokemon.order}</Text>
           <Text style={styles.name}>{pokemon.name}</Text>
           <Image source={{ uri: pokemon.img }} style={styles.image} />
-        </DiagonalGradient>
+        </PokemonTypeGradient>
       </FadeInView>
     </Pressable>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native';
 
 import UiFeedback from '../components/UiFeedback';
-import PokemonList from '../components/pokemon/PokemonList';
+import PokemonList from '../components/pokedex/PokemonList';
 import { useFetchPokemonDetailList } from '../hooks/useFetchPokemonDetailList';
 import { PokemonDetailSimple } from '../types/pokemon';
 

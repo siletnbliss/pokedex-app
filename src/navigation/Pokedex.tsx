@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { Text } from 'react-native';
 
 import { PokedexStackParamsList } from './nav-params';
 import Pokedex from '../screens/Pokedex';
@@ -19,13 +18,11 @@ export default function PokedexNavigation() {
       <Stack.Screen
         name="Pokemon"
         component={Pokemon}
-        options={({ route }) => ({
-          headerTitle: () => (
-            <Text style={{ textTransform: 'capitalize', fontSize: 20, fontWeight: '500' }}>
-              {route.params.name}
-            </Text>
-          ),
-        })}
+        options={{
+          title: '',
+          headerTransparent: true,
+          //headerTintColor: 'white',
+        }}
       />
     </Stack.Navigator>
   );

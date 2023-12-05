@@ -3,11 +3,11 @@ import { Map, useFetcherList } from './useFetcher';
 import { PokemonDetailRaw, PokemonDetailSimple } from '../types/pokemon';
 import { getColorFromType } from '../utils/getColorFromType';
 
-const mapper: Map<PokemonDetailRaw, PokemonDetailSimple> = (poke) => ({
+export const pokemonDetailRawSimpleMap: Map<PokemonDetailRaw, PokemonDetailSimple> = (poke) => ({
   id: poke.id,
   name: poke.name,
   type: poke.types.map((t) => t.type.name),
-  order: poke.order,
+  order: String(poke.id).padStart(3, '0'),
   img: poke.sprites.other['official-artwork'].front_default,
   typeColors: poke.types.map((t) => getColorFromType(t.type.name)),
 });
@@ -28,7 +28,7 @@ export const useFetchPokemonDetailList = (urls?: string[]) => {
 
   const results = useFetcherList<PokemonDetailSimple, PokemonDetailRaw>(
     baseList ? baseList.pages.flatMap((p) => p.results).map((item) => [item.url]) : [],
-    { api: 'blank', map: mapper }
+    { api: 'blank', map: pokemonDetailRawSimpleMap }
   );
 
   return {
