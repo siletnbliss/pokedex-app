@@ -3,6 +3,7 @@ import { Text, ScrollView } from 'react-native';
 
 import UiFeedback from '../components/UiFeedback';
 import Header from '../components/pokemon/Header';
+import Stats from '../components/pokemon/Stats';
 import Type from '../components/pokemon/Type';
 import { useFetchPokemonSingleDetail } from '../hooks/useFetchPokemonDetail';
 import { PokemonScreenProps } from '../navigation/nav-params';
@@ -22,6 +23,7 @@ export default function Pokemon({ route, navigation }: PokemonScreenProps) {
     <ScrollView>
       <Header pokemon={pokemon} />
       <Type types={pokemon.type} colors={pokemon.typeColors} />
+      <Stats stats={pokemon.stats} />
     </ScrollView>
   );
 }

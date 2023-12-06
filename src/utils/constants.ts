@@ -6,6 +6,7 @@ export const COLORS = {
   primary: '#ee1515',
   error: 'darkorange',
   lightgray: '#D3D3D3',
+  textGray: '#6b6b6b',
 };
 
 export const POKEMON_TYPE_COLORS = {
