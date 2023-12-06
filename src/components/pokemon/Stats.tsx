@@ -1,29 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, DimensionValue } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
+import ProgressBar from './ProgressBar';
 import { PokemonDetailFull } from '../../types/pokemon';
 import { COLORS } from '../../utils/constants';
 
 interface Props {
   stats: PokemonDetailFull['stats'];
 }
-
-const getBarStyles = (stat: number) => {
-  let bgColor = '#ff3e3e';
-
-  if (stat > 25 && stat < 50) {
-    bgColor = '#F08700';
-  } else if (stat >= 50 && stat < 80) {
-    bgColor = '#EFCA08';
-  } else if (stat >= 80) {
-    bgColor = '#6EEB83';
-  }
-  const roundedPercent = Math.floor((100 * stat) / 120);
-  return {
-    backgroundColor: bgColor,
-    width: (roundedPercent + `%`) as DimensionValue,
-  };
-};
 
 export default function Stats({ stats }: Props) {
   return (
@@ -36,9 +20,7 @@ export default function Stats({ stats }: Props) {
           </View>
           <View style={styles.blockInfo}>
             <Text style={styles.statNumber}>{stat.base_stat}</Text>
-            <View style={styles.bgBar}>
-              <View style={[styles.bar, getBarStyles(stat.base_stat)]} />
-            </View>
+            <ProgressBar stat={stat.base_stat} />
           </View>
         </View>
       ))}
@@ -49,8 +31,8 @@ export default function Stats({ stats }: Props) {
 const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
-    marginTop: 40,
-    marginBottom: 60,
+    marginTop: 30,
+    marginBottom: 40,
   },
   title: {
     fontWeight: 'bold',
