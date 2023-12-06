@@ -1,6 +1,6 @@
 # Pokédex App
 
-React native app built to earn my React Native certification @Platzi.
+React native app built to earn my React Native certification @Platzi. Included simple auth backend with Nest.js
 
 ## Modules used
 
