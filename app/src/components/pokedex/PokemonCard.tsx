@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { Text, StyleSheet, Image, Pressable } from 'react-native';
 
 import PokemonTypeGradient from './PokemonTypeGradient';
@@ -8,16 +8,23 @@ import FadeInView from '../FadeInView';
 interface Props {
   pokemon: PokemonDetailSimple;
   onPress: (pokemon: PokemonDetailSimple) => void;
+  height?: number;
 }
-
-function PokemonCard({ pokemon, onPress }: Props) {
+// 130 -> 90
+// height -> imgSize
+// imgSize = height * 90 /130
+function PokemonCard({ pokemon, onPress, height = 130 }: Props) {
+  const imageSize = useMemo(() => Math.round((height * 9) / 13), [height]);
   return (
-    <Pressable style={styles.card} onPress={() => onPress(pokemon)}>
+    <Pressable style={[styles.card, { height }]} onPress={() => onPress(pokemon)}>
       <FadeInView duration={500} style={styles.spacing}>
         <PokemonTypeGradient colors={pokemon.typeColors} style={styles.background}>
           <Text style={styles.number}>#{pokemon.order}</Text>
           <Text style={styles.name}>{pokemon.name}</Text>
-          <Image source={{ uri: pokemon.img }} style={styles.image} />
+          <Image
+            source={{ uri: pokemon.img }}
+            style={[styles.image, { width: imageSize, height: imageSize }]}
+          />
         </PokemonTypeGradient>
       </FadeInView>
     </Pressable>
@@ -29,7 +36,7 @@ export default memo(PokemonCard);
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    height: 130,
+    //height: 130,
   },
   spacing: {
     flex: 1,
@@ -44,8 +51,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 2,
     right: 2,
-    width: 90,
-    height: 90,
+    //width: 90,
+    //height: 90,
   },
   name: {
     color: '#fff',

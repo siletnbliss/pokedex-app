@@ -22,6 +22,7 @@ const CustomLoader = ({ isTop = false }: { isTop?: boolean }) => (
     <Spinner size={60} />
   </Container>
 );
+const ITEM_HEIGHT = 130;
 
 export default function PokemonList({
   pokemon,
@@ -43,14 +44,16 @@ export default function PokemonList({
       numColumns={2}
       showsVerticalScrollIndicator={false}
       keyExtractor={(p) => String(p.id)}
-      renderItem={({ item }) => <PokemonCard pokemon={item} onPress={onPokemonPress} />}
+      renderItem={({ item }) => (
+        <PokemonCard pokemon={item} onPress={onPokemonPress} height={ITEM_HEIGHT} />
+      )}
       contentContainerStyle={styles.flatListContainer}
       onEndReached={loadMore}
       onEndReachedThreshold={0.2}
-      onScrollToTop={loadPrevious}
       ListHeaderComponent={isLoadingPrevious ? <CustomLoader isTop /> : null}
       ListFooterComponent={hasNext ? <CustomLoader /> : null}
       maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
+      getItemLayout={(data, index) => ({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index })}
     />
   );
 }
