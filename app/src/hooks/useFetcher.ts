@@ -1,8 +1,15 @@
-import { useInfiniteQuery, useQueries, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueries,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
+import axios from 'axios';
 
-import { API_HOST } from '../utils/constants';
+import { API_HOST, AUTH_HOST } from '../utils/constants';
 
-type APIs = 'pokemon' | 'blank';
+type APIs = 'pokemon' | 'blank' | 'auth';
 interface Config<Result, Raw = Result> {
   api?: APIs;
   map?: Map<Raw, Result>;
@@ -11,9 +18,17 @@ interface Config<Result, Raw = Result> {
 export type Map<From, To> = (r: From) => To;
 type ExtendedQueryKey = string | number | Record<string, any>;
 
-export const fetcher = async <R, M>(url: string, map?: Map<M, R>): Promise<R> => {
+interface FetcherConfig {
+  method?: 'post' | 'get' | 'put' | 'delete';
+}
+
+export const fetcher = async <R, M>(
+  url: string,
+  map?: Map<M, R>,
+  config: FetcherConfig = { method: 'get' }
+): Promise<R> => {
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { method: config.method });
 
     if (!res.ok) {
       throw new Error('Fetch error');
@@ -56,6 +71,9 @@ const parseKey = (k: ExtendedQueryKey[], api?: APIs) => {
   switch (api) {
     case 'pokemon':
       baseUrl = API_HOST;
+      break;
+    case 'auth':
+      baseUrl = AUTH_HOST;
       break;
     case 'blank':
       baseUrl = '';
@@ -131,3 +149,20 @@ export function useInfiniteFetcher<Result, Mapped = Result>(
 
   return { ...result };
 }
+
+type MutatorConfig<Result> = Omit<Config<Result>, 'map'> & FetcherConfig;
+type MutationMethod = 'post' | 'put';
+
+export const useMutator = <Result, Param>(
+  key: ExtendedQueryKey[],
+  { method = 'post', api }: MutatorConfig<Result>
+) => {
+  const url = parseKey(key, api);
+  const mutation = useMutation({
+    mutationFn: async (dto: Param) => {
+      const res = await axios[method as MutationMethod](url, dto);
+      return res.data as Result;
+    },
+  });
+  return { ...mutation };
+};

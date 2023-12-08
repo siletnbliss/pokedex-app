@@ -1,6 +1,7 @@
-import { API_URL } from '@env';
+import { API_URL, AUTH_API_URL } from '@env';
 
 export const API_HOST = API_URL;
+export const AUTH_HOST = AUTH_API_URL;
 
 export const COLORS = {
   primary: '#ee1515',
