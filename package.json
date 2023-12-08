@@ -4,9 +4,14 @@
   "description": "react native application for course certification",
   "main": "index.js",
   "scripts": {
-    "start": "cd app && npm run start",
+    "app": "cd app && npm run start",
+    "auth": "cd auth-api && npm run start",
+    "dev": "npm-run-parallel auth app ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "npm-run-parallel": "^0.6.0"
+  }
 }
