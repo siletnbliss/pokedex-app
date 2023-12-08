@@ -7,7 +7,7 @@ export class GetUsersService {
   constructor(private repository: UserRepositoryPort) {}
 
   async getUser(dto: GetUserDto) {
-    const user = this.repository.getUserFromCredentials(dto);
+    const user = await this.repository.getUserFromCredentials(dto);
     if (!user) throw new BadRequestException(`user not found`);
     return user;
   }

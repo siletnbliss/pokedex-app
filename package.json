@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "app": "cd app && npm run start",
-    "auth": "cd auth-api && npm run start",
+    "auth": "cd auth-api && npm run start:dev",
     "dev": "npm-run-parallel auth app ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
