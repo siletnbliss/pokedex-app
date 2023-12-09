@@ -34,9 +34,9 @@ export default function PokemonList({
 }: Props) {
   const navigation = useNavigation<PokedexScreenNavigationProps['navigation']>();
 
-  const onPokemonPress = (pokemon: PokemonDetailSimple) => {
+  function onPokemonPress(pokemon: PokemonDetailSimple) {
     navigation.navigate('Pokemon', { id: String(pokemon.id), name: pokemon.name });
-  };
+  }
 
   return (
     <FlatList

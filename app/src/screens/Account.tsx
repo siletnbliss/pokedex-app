@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 
+import LoginForm from '../components/auth/LoginForm';
+import UserPanel from '../components/auth/UserPanel';
 import { useSignIn } from '../hooks/useSignIn';
 
 export default function Account() {
@@ -11,8 +13,7 @@ export default function Account() {
   return (
     <View>
       <Text>Account</Text>
-      <Text>User: {user?.user.name}</Text>
-      <Button title="Sign In" onPress={handleLogin} />
+      {user ? <UserPanel /> : <LoginForm />}
     </View>
   );
 }
