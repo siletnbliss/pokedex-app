@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "npm-run-parallel": "^0.6.0"
+    "formik": "^2.4.5",
+    "npm-run-parallel": "^0.6.0",
+    "yup": "^1.3.2"
   }
 }
