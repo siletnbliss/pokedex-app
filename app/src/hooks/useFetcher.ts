@@ -1,6 +1,7 @@
 import {
   useInfiniteQuery,
   useMutation,
+  UseMutationOptions,
   useQueries,
   useQuery,
   UseQueryOptions,
@@ -150,12 +151,15 @@ export function useInfiniteFetcher<Result, Mapped = Result>(
   return { ...result };
 }
 
-type MutatorConfig<Result> = Omit<Config<Result>, 'map'> & FetcherConfig;
+type MutatorConfig<Result, Param> = Omit<Config<Result>, 'map'> &
+  FetcherConfig & {
+    onError?: UseMutationOptions<Result, Error, Param>['onError'];
+  };
 type MutationMethod = 'post' | 'put';
 
 export const useMutator = <Result, Param>(
   key: ExtendedQueryKey[],
-  { method = 'post', api }: MutatorConfig<Result>
+  { method = 'post', api, onError }: MutatorConfig<Result, Param>
 ) => {
   const url = parseKey(key, api);
   const mutation = useMutation({
@@ -163,6 +167,7 @@ export const useMutator = <Result, Param>(
       const res = await axios[method as MutationMethod](url, dto);
       return res.data as Result;
     },
+    onError,
   });
   return { ...mutation };
 };

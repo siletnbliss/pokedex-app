@@ -17,7 +17,7 @@ type Props = PressableProps & {
 
 export const CustomButton = ({ loading, title, style, ...rest }: Props) => {
   return (
-    <Pressable style={[styles.buttonPrimary, style]} {...rest}>
+    <Pressable style={[styles.buttonPrimary, style]} disabled={loading} {...rest}>
       {loading ? (
         <ActivityIndicator color="white" size="small" />
       ) : (

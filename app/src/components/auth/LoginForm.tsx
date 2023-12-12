@@ -5,6 +5,11 @@ import * as Yup from 'yup';
 
 import { CustomButton } from '../Button';
 
+interface Props {
+  onSubmit: (values: Form) => void;
+  loading?: boolean;
+}
+
 interface Form {
   user: string;
   password: string;
@@ -19,15 +24,15 @@ const validationSchema = Yup.object<Form>().shape({
   user: Yup.string().required('Please enter your username'),
   password: Yup.string().required('Please enter  your password').min(5, 'Invalid password length'),
 });
-// TODO: run this and see how it looks
-export default function LoginForm() {
+
+export default function LoginForm({ onSubmit, loading }: Props) {
   const formik = useFormik<Form>({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      console.log({ values });
+      onSubmit(values);
     },
-    validateOnBlur: true,
+    validateOnBlur: false,
     validateOnChange: false,
   });
   const handleSubmit = () => {
@@ -56,7 +61,12 @@ export default function LoginForm() {
       />
       <Text style={styles.error}> {formik.errors.password}</Text>
 
-      <CustomButton onPress={handleSubmit} style={{ marginTop: 15 }} title="Sign In" />
+      <CustomButton
+        onPress={handleSubmit}
+        style={{ marginTop: 15 }}
+        title="Sign In"
+        loading={loading}
+      />
     </View>
   );
 }
