@@ -10,10 +10,5 @@ export default function Account() {
   const handleLogin = () => {
     onSignIn({ user: 'luigi', pass: 'password' });
   };
-  return (
-    <View>
-      <Text>Account</Text>
-      {user ? <UserPanel /> : <LoginForm />}
-    </View>
-  );
+  return <View>{user ? <UserPanel /> : <LoginForm />}</View>;
 }

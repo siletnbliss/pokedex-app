@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import React from 'react';
-import { View, Text, StyleSheet, Button, Keyboard, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import * as Yup from 'yup';
 
 import { CustomButton } from '../Button';
@@ -34,7 +34,7 @@ export default function LoginForm() {
     formik.handleSubmit();
   };
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <TextInput
         placeholder="Username"
@@ -56,12 +56,15 @@ export default function LoginForm() {
       />
       <Text style={styles.error}> {formik.errors.password}</Text>
 
-      <CustomButton onPress={handleSubmit} title="Sign In" />
+      <CustomButton onPress={handleSubmit} style={{ marginTop: 15 }} title="Sign In" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    margin: 12,
+  },
   title: {
     textAlign: 'center',
     fontSize: 28,
@@ -71,7 +74,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    margin: 12,
+    //margin: 12,
+    marginTop: 10,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
@@ -79,6 +83,6 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     textAlign: 'left',
-    marginTop: 10,
+    marginBottom: 10,
   },
 });

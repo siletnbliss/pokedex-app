@@ -5,6 +5,7 @@ export const AUTH_HOST = AUTH_API_URL;
 
 export const COLORS = {
   primary: '#ee1515',
+  primaryButton: '#f14444',
   error: 'darkorange',
   lightgray: '#D3D3D3',
   textGray: '#6b6b6b',
