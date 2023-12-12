@@ -4,7 +4,11 @@ import { useMutator } from './useFetcher';
 import { AuthenticateUserParams, AuthenticateUserResponse } from '../types/auth';
 import { getErrorCode } from '../utils/getErrorCode';
 
-export const useSignIn = () => {
+interface State {
+  onSuccess?: (data: AuthenticateUserResponse, context: AuthenticateUserParams) => void;
+}
+
+export const useSignIn = ({ onSuccess }: State = { onSuccess: undefined }) => {
   const {
     data: user,
     mutate,
@@ -12,6 +16,7 @@ export const useSignIn = () => {
   } = useMutator<AuthenticateUserResponse, AuthenticateUserParams>(['auth', 'login'], {
     method: 'post',
     api: 'auth',
+    onSuccess,
     onError: (error, variables) => {
       const code = getErrorCode(error);
 
@@ -26,6 +31,7 @@ export const useSignIn = () => {
   return {
     user,
     onSignIn: mutate,
+
     ...rest,
   };
 };

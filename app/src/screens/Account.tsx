@@ -3,14 +3,16 @@ import { View } from 'react-native';
 
 import LoginForm from '../components/auth/LoginForm';
 import UserPanel from '../components/auth/UserPanel';
-import { useSignIn } from '../hooks/useSignIn';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Account() {
-  const { user, onSignIn, isPending } = useSignIn();
+  const { data, isSignedIn, isLoadingSignIn, signIn, signOut } = useAuth();
   const handleLogin = (values: { user: string; password: string }) => {
-    onSignIn({ user: values.user, pass: values.password });
+    signIn({ user: values.user, pass: values.password });
   };
   return (
-    <View>{user ? <UserPanel /> : <LoginForm onSubmit={handleLogin} loading={isPending} />}</View>
+    <View>
+      {isSignedIn ? <UserPanel /> : <LoginForm onSubmit={handleLogin} loading={isLoadingSignIn} />}
+    </View>
   );
 }
