@@ -40,7 +40,7 @@ export default function LoginForm({ onSubmit, loading }: Props) {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Sign In</Text>
       <TextInput
         placeholder="Username"
         style={styles.input}

@@ -12,7 +12,11 @@ export default function Account() {
   };
   return (
     <View>
-      {isSignedIn ? <UserPanel /> : <LoginForm onSubmit={handleLogin} loading={isLoadingSignIn} />}
+      {isSignedIn && !!data ? (
+        <UserPanel user={data?.user} onLogout={signOut} />
+      ) : (
+        <LoginForm onSubmit={handleLogin} loading={isLoadingSignIn} />
+      )}
     </View>
   );
 }
